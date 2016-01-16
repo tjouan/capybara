@@ -51,6 +51,7 @@ module Capybara
     end
 
     def responsive?
+      return false if !@server_thread
       return false if @server_thread && @server_thread.join(0)
 
       res = Net::HTTP.start(host, @port) { |http| http.get('/__identify__') }
