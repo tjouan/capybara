@@ -70,7 +70,9 @@ module Capybara
           Capybara.server.call(@middleware, @port)
         end
 
-        Timeout.timeout(60) { @server_thread.join(0.1) until responsive? }
+        Timeout.timeout ENV.fetch('CAPYBARA_SERVER_WAIT_TIME', 60).to_i do
+          @server_thread.join(0.1) until responsive?
+        end
       end
     rescue Timeout::Error
       raise "Rack application timed out during boot"
